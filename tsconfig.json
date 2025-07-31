@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    /* Language & module support */
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+
+    /* Path alias support */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* Interop and flexibility */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+
+    /* Dev experience */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Use Vite’s env types */
+    "types": ["vite/client"],
+
+    /* Improve build performance */
+    "isolatedModules": true,
+    "useDefineForClassFields": true
+  },
+
+  "include": [
+    "src",
+    "src/vite-env.d.ts",
+    "vite.config.ts"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "dist",
+    ".next",
+    "build",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}
