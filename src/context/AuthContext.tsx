@@ -1,3 +1,5 @@
+// src/context/AuthContext.tsx
+
 import React, {
   createContext,
   useContext,
@@ -8,7 +10,7 @@ import React, {
 } from "react"
 import { toast } from "react-hot-toast"
 import { getTokenFromStorage, saveToken, removeToken } from "@/utils/token"
-import { getCurrentUser } from "@/services/auth"
+import { getCurrentUser, registerUser } from "@/services/auth"
 
 // === ALL Fixiva Roles, Complete ===
 export const FIXIVA_ROLES = [
@@ -36,10 +38,17 @@ export interface UseAuthReturn {
   token: string | null
   loading: boolean
   isAuthenticated: boolean
+
+  /** Store token & user after successful login */
   login: (token: string, userInfo: any) => void
+  /** Register a new user, store token & user on success */
+  register: (name: string, email: string, password: string) => Promise<void>
+  /** Clear auth state */
   logout: () => void
+
   hasRole: (roles: FixivaRole[]) => boolean
-  // Individual role helpers (ALL BELOW)
+
+  // Individual role helpers
   isAdmin: boolean
   isVendor: boolean
   isVendorPartner: boolean
@@ -59,16 +68,20 @@ export interface UseAuthReturn {
 
 export const AuthContext = createContext<UseAuthReturn | null>(null)
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(null)
   const [role, setRole] = useState<FixivaRole | null>(null)
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // Initialize on mount: load token & fetch current user
   useEffect(() => {
     const init = async () => {
       const storedToken = getTokenFromStorage()
-      if (!storedToken) return setLoading(false)
+      if (!storedToken) {
+        setLoading(false)
+        return
+      }
       setToken(storedToken)
       try {
         const res = await getCurrentUser(storedToken)
@@ -94,6 +107,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast.success("Logged in successfully.")
   }, [])
 
+  const register = useCallback(
+    async (name: string, email: string, password: string) => {
+      setLoading(true)
+      try {
+        // Call backend signup endpoint
+        const res = await registerUser({ name, email, password })
+        // Expect { token: string; user: { ...; role: FixivaRole } }
+        saveToken(res.token)
+        setToken(res.token)
+        setUser(res.user)
+        setRole(res.user.role)
+        toast.success("Registered successfully.")
+      } catch (err: any) {
+        toast.error(err?.message || "Registration failed.")
+        throw err
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
+
   const logout = useCallback(() => {
     removeToken()
     setToken(null)
@@ -106,22 +141,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     (roles: FixivaRole[]) => (role ? roles.includes(role) : false),
     [role]
   )
+
   const isRole = (target: FixivaRole) => role === target
 
-  // Multi-segment helpers
   const isGovt =
-    role === "govt_officer" || role === "govt_employee" || role === "govt_contractor"
+    role === "govt_officer" ||
+    role === "govt_employee" ||
+    role === "govt_contractor"
 
   const value: UseAuthReturn = {
     user,
     role,
     token,
     loading,
-    isAuthenticated: !!user,
+    isAuthenticated: Boolean(user),
     login,
+    register,
     logout,
     hasRole,
-    // INDIVIDUAL ROLE CHECKS (ALL ROLES)
     isAdmin: isRole("admin"),
     isVendor: isRole("vendor"),
     isVendorPartner: isRole("vendor_partner"),
@@ -136,7 +173,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isPartner: isRole("client_partner"),
     isSupportAgent: isRole("support_agent"),
     isAuditor: isRole("auditor"),
-    isFranchise: isRole("franchise_owner")
+    isFranchise: isRole("franchise_owner"),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
