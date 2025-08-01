@@ -1,5 +1,3 @@
-// src/components/home/HowItWorksSection.tsx
-
 import React from "react"
 import clsx from "clsx"
 import { useTranslation } from "react-i18next"
@@ -11,17 +9,17 @@ import {
 } from "react-icons/fa"
 
 export interface HowItWorksSectionProps {
-  /** Optional extra classes */
   className?: string
 }
 
 /**
  * HowItWorksSection
- * Explains in 4 simple steps how Fixiva works.
- * Responsive, i18n-ready, theme-aware, and accessible.
+ * - Guides users through the Fixiva process
+ * - Theme-aware, fully translated, and accessible
+ * - Layout scales across all screen sizes
  */
 const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ className }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const steps = [
     {
@@ -50,6 +48,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ className }) => {
     <section
       role="region"
       aria-labelledby="how-it-works-heading"
+      dir={i18n.dir()}
       className={clsx(
         "py-16 bg-[--color-bg] text-[--color-text]",
         className
@@ -58,10 +57,11 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ className }) => {
       <div className="max-w-5xl mx-auto px-4 text-center">
         <h2
           id="how-it-works-heading"
-          className="text-3xl font-bold mb-8"
+          className="text-3xl font-bold mb-10"
         >
           {t("home.howItWorks.heading")}
         </h2>
+
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, idx) => (
             <div

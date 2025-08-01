@@ -1,0 +1,16 @@
+// src/components/home/index.ts
+
+export { default as HeroSection } from "./HeroSection"
+export { default as FeaturesSection } from "./FeaturesSection"
+export { default as HowItWorksSection } from "./HowItWorksSection"
+export { default as TestimonialsSection } from "./TestimonialsSection"
+export { default as HomeCTASection } from "./HomeCTASection"
+export { default as LandingFooterSection } from "./LandingFooterSection"
+export { default as AppDownloadSection } from "./AppDownloadSection"
+export { default as FAQSection } from "./FAQSection"
+export { default as HomeStatsBanner } from "./HomeStatsBanner"
+export { default as LanguageSelectorBanner } from "./LanguageSelectorBanner"
+export { default as LoyaltyExplainerSection } from "./LoyaltyExplainerSection"
+export { default as SmartAssistantPromo } from "./SmartAssistantPromo"
+export { default as GovtUseCasesSection } from "./GovtUseCasesSection"
+export { default as EnterpriseCTASection } from "./EnterpriseCTASection"

@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from "react"
-import clsx from "clsx"
 import { useTranslation } from "react-i18next"
-import { useNotification } from "@/hooks/useNotification"
-import { useTheme } from "@/hooks/useTheme"
+import { FaMapMarkerAlt, FaCoins } from "react-icons/fa"
+import clsx from "clsx"
+
 import Modal from "@/components/shared/Modal"
 import BookingStatusTracker, {
   BookingStatus,
 } from "@/components/booking/BookingStatusTracker"
-import { BookingDetails, PriceBreakdownItem } from "@/components/booking/BookingConfirmation"
+import { useNotification } from "@/hooks/useNotification"
+import { useTheme } from "@/hooks/useTheme"
 import { getBookingDetails } from "@/services/dashboard"
-import { FaMapMarkerAlt, FaCoins } from "react-icons/fa"
+import { BookingDetails, PriceBreakdownItem } from "@/components/booking/BookingConfirmation"
 
 export interface BookingDetailModalProps {
-  /** Booking ID to fetch details for */
   bookingId: string
-  /** Whether the modal is open */
   show: boolean
-  /** Called to close the modal */
   onClose: () => void
 }
 
-/**
- * BookingDetailModal
- * Drill-down view of a single booking: real-time status tracker,
- * service info, vendor, schedule, location, price breakdown and recycle bonus.
- * Accessible, theme-aware, i18n-ready, production-grade.
- */
 const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
   bookingId,
   show,
@@ -42,7 +34,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
     if (!show) return
     setLoading(true)
     getBookingDetails(bookingId)
-      .then((res) => {
+      .then((res: BookingDetails) => {
         setDetails(res)
       })
       .catch((err: any) => {

@@ -1,5 +1,3 @@
-// src/components/home/TestimonialsSection.tsx
-
 import React from "react"
 import clsx from "clsx"
 import { useTranslation } from "react-i18next"
@@ -13,27 +11,26 @@ export interface Testimonial {
 }
 
 export interface TestimonialsSectionProps {
-  /** Array of testimonials to display */
   testimonials: Testimonial[]
-  /** Optional extra classes */
   className?: string
 }
 
 /**
  * TestimonialsSection
- * Showcases user/vendor/government partner quotes in a responsive grid.
- * World-class, accessible, i18n-ready, and theme-aware.
+ * - Displays quotes from customers, vendors, partners, and govt officers
+ * - Responsive, i18n-ready, theme-aware, SEO-friendly
  */
 const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   testimonials,
   className,
 }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (
     <section
       role="region"
       aria-labelledby="testimonials-heading"
+      dir={i18n.dir()}
       className={clsx("py-16 bg-[--color-bg-secondary] text-[--color-text-secondary]", className)}
     >
       <div className="max-w-6xl mx-auto px-4">
@@ -48,10 +45,15 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
           {testimonials.map((tst, idx) => (
             <blockquote
               key={idx}
-              className="relative p-6 bg-[--color-bg] rounded-lg shadow-lg flex flex-col items-center text-center"
+              className="relative p-6 bg-[--color-bg] rounded-lg shadow-lg flex flex-col items-center text-center hover:shadow-xl transition-shadow"
             >
-              <FaQuoteLeft className="text-4xl text-[--color-primary] mb-4" aria-hidden="true" />
-              <p className="text-sm leading-relaxed mb-4">&ldquo;{tst.quote}&rdquo;</p>
+              <FaQuoteLeft
+                className="text-4xl text-[--color-primary] mb-4"
+                aria-hidden="true"
+              />
+              <p className="text-sm leading-relaxed mb-4">
+                &ldquo;{tst.quote}&rdquo;
+              </p>
               {tst.photoUrl && (
                 <img
                   src={tst.photoUrl}

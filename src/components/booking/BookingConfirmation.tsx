@@ -1,5 +1,3 @@
-// src/components/booking/BookingConfirmation.tsx
-
 import React from "react"
 import clsx from "clsx"
 import useAuth from "@/hooks/useAuth"
@@ -19,6 +17,14 @@ export interface PriceBreakdownItem {
   amount: number
 }
 
+export type BookingStatus =
+  | "pending"
+  | "confirmed"
+  | "in_progress"
+  | "completed"
+  | "cancelled"
+  | "rejected"
+
 export interface BookingDetails {
   serviceName: string
   dateTime: string // ISO string
@@ -26,6 +32,7 @@ export interface BookingDetails {
   location: BookingLocation
   priceBreakdown: PriceBreakdownItem[]
   recycleBonus?: number
+  status: BookingStatus // ✅ Added for real-time tracking
 }
 
 export interface BookingConfirmationProps {
@@ -193,7 +200,6 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
                   <span>{formatCurrency(item.amount)}</span>
                 </li>
               ))}
-
               <li className="py-2 flex justify-between font-semibold">
                 <span>{t("booking.total")}</span>
                 <span>{formatCurrency(totalPrice)}</span>

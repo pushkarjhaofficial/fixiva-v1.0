@@ -1,5 +1,3 @@
-// src/components/home/HeroSection.tsx
-
 import React from "react"
 import clsx from "clsx"
 import { useTranslation } from "react-i18next"
@@ -7,20 +5,19 @@ import { useTheme } from "@/hooks/useTheme"
 import { Link } from "react-router-dom"
 
 export interface HeroSectionProps {
-  /** Optional extra classes */
   className?: string
 }
 
 /**
  * HeroSection
- * World-class landing page hero with headline, subheadline,
- * primary & secondary CTAs, responsive design, theming, and i18n.
+ * - SSR-safe landing section with background image
+ * - i18n + RTL + responsive + theme-aware
+ * - CTA buttons with full accessibility and visual priority
  */
 const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { theme } = useTheme()
 
-  // Background image varies by theme
   const bgImage =
     theme === "dark"
       ? "url('/images/hero-dark.jpg')"
@@ -28,25 +25,31 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
 
   return (
     <section
+      role="region"
+      aria-labelledby="hero-heading"
+      dir={i18n.dir()}
       className={clsx(
-        "relative flex items-center justify-center text-center text-[--color-text]",
-        "h-screen bg-cover bg-center",
+        "relative flex items-center justify-center text-center",
+        "h-screen bg-cover bg-center text-[--color-text]",
         className
       )}
-      style={{
-        backgroundImage: bgImage,
-      }}
+      style={{ backgroundImage: bgImage }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-40" />
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
 
       <div className="relative z-10 max-w-3xl px-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4">
+        <h1
+          id="hero-heading"
+          className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 leading-tight"
+        >
           {t("home.heroHeadline")}
         </h1>
+
         <p className="text-lg sm:text-xl md:text-2xl mb-6 leading-relaxed">
           {t("home.heroSubheadline")}
         </p>
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/booking"
