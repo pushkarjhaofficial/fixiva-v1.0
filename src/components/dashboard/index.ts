@@ -5,3 +5,4 @@ export { default as DashboardChart } from "./DashboardChart"
 export { default as ActivityFeed } from "./ActivityFeed"
 export { default as BookingDetailModal } from "./BookingDetailModal"
 export { default as FilterBar } from "./FilterBar"
+

@@ -1,5 +1,3 @@
-// src/components/dashboard/BookingDetailModal.tsx
-
 import React, { useState, useEffect } from "react"
 import clsx from "clsx"
 import { useTranslation } from "react-i18next"
